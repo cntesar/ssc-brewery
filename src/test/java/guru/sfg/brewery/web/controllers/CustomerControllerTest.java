@@ -44,98 +44,106 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class CustomerControllerTest {
 
-    @Mock
-    CustomerRepository customerRepository;
+  @Mock CustomerRepository customerRepository;
 
-    @InjectMocks
-    CustomerController controller;
-    List<Customer> customerList;
-    UUID uuid;
-    Customer customer;
+  @InjectMocks CustomerController controller;
+  List<Customer> customerList;
+  UUID uuid;
+  Customer customer;
 
-    MockMvc mockMvc;
+  MockMvc mockMvc;
 
-    @BeforeEach
-    void setUp() {
-        customerList = new ArrayList<Customer>();
-        customerList.add(Customer.builder().customerName("John Doe").build());
-        customerList.add(Customer.builder().customerName("John Doe").build());
+  @BeforeEach
+  void setUp() {
+    customerList = new ArrayList<Customer>();
+    customerList.add(Customer.builder().customerName("John Doe").build());
+    customerList.add(Customer.builder().customerName("John Doe").build());
 
-        final String id = "493410b3-dd0b-4b78-97bf-289f50f6e74f";
-        uuid = UUID.fromString(id);
+    final String id = "493410b3-dd0b-4b78-97bf-289f50f6e74f";
+    uuid = UUID.fromString(id);
 
-        mockMvc = MockMvcBuilders
-                .standaloneSetup(controller)
-                .build();
-    }
+    mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+  }
 
-    @Test
-    void findCustomers() throws Exception{
-        mockMvc.perform(get("/customers/find"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("customers/findCustomers"))
-                .andExpect(model().attributeExists("customer"));
-        verifyZeroInteractions(customerRepository);
-    }
-//ToDO: Fix stubbing error
-    @Test
-    @Disabled
-    void processFindFormReturnMany() throws Exception{
-        when(customerRepository.findAllByCustomerNameLike("John Doe")).thenReturn(customerList);
+  @Test
+  void findCustomers() throws Exception {
+    mockMvc
+        .perform(get("/customers/find"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("customers/findCustomers"))
+        .andExpect(model().attributeExists("customer"));
+    verifyNoInteractions(customerRepository);
+  }
 
-        mockMvc.perform(get("/customers"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("customers/customerList"))
-                .andExpect(model().attribute("selections", hasSize(2)));
-    }
+  // ToDO: Fix stubbing error
+  @Test
+  @Disabled
+  void processFindFormReturnMany() throws Exception {
+    when(customerRepository.findAllByCustomerNameLike("John Doe")).thenReturn(customerList);
 
-    @Test
-    void showCustomer() throws Exception{
-        when(customerRepository.findById(uuid)).thenReturn(Optional.of(Customer.builder().id(uuid).build()));
-        mockMvc.perform(get("/customers/"+uuid))
-                .andExpect(status().isOk())
-                .andExpect(view().name("customers/customerDetails"))
-                .andExpect(model().attribute("customer", hasProperty("id", is(uuid))));
-    }
+    mockMvc
+        .perform(get("/customers"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("customers/customerList"))
+        .andExpect(model().attribute("selections", hasSize(2)));
+  }
 
-    @Test
-    void initCreationForm() throws Exception{
-        mockMvc.perform(get("/customers/new"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("customers/createCustomer"))
-                .andExpect(model().attributeExists("customer"));
-        verifyZeroInteractions(customerRepository);
-    }
+  @Test
+  void showCustomer() throws Exception {
+    when(customerRepository.findById(uuid))
+        .thenReturn(Optional.of(Customer.builder().id(uuid).build()));
+    mockMvc
+        .perform(get("/customers/" + uuid))
+        .andExpect(status().isOk())
+        .andExpect(view().name("customers/customerDetails"))
+        .andExpect(model().attribute("customer", hasProperty("id", is(uuid))));
+  }
 
-    @Test
-    void processCreationForm() throws Exception{
-        when(customerRepository.save(ArgumentMatchers.any())).thenReturn(Customer.builder().id(uuid).build());
-        mockMvc.perform(post("/customers/new"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/customers/"+ uuid))
-                .andExpect(model().attributeExists("customer"));
-        verify(customerRepository).save(ArgumentMatchers.any());
-    }
+  @Test
+  void initCreationForm() throws Exception {
+    mockMvc
+        .perform(get("/customers/new"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("customers/createCustomer"))
+        .andExpect(model().attributeExists("customer"));
+    verifyNoInteractions(customerRepository);
+  }
 
-    @Test
-    void initUpdateCustomerForm() throws Exception{
-        when(customerRepository.findById(uuid)).thenReturn(Optional.of(Customer.builder().id(uuid).build()));
-        mockMvc.perform(get("/customers/"+uuid+"/edit"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("customers/createOrUpdateCustomer"))
-                .andExpect(model().attributeExists("customer"));
-        verifyZeroInteractions(customerRepository);
-    }
+  @Test
+  void processCreationForm() throws Exception {
+    when(customerRepository.save(ArgumentMatchers.any()))
+        .thenReturn(Customer.builder().id(uuid).build());
+    mockMvc
+        .perform(post("/customers/new"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(view().name("redirect:/customers/" + uuid))
+        .andExpect(model().attributeExists("customer"));
+    verify(customerRepository).save(ArgumentMatchers.any());
+  }
 
-    @Test
-    void processUpdationForm() throws Exception{
-        when(customerRepository.save(ArgumentMatchers.any())).thenReturn(Customer.builder().id(uuid).build());
+  @Test
+  void initUpdateCustomerForm() throws Exception {
+    when(customerRepository.findById(uuid))
+        .thenReturn(Optional.of(Customer.builder().id(uuid).build()));
+    mockMvc
+        .perform(get("/customers/" + uuid + "/edit"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("customers/createOrUpdateCustomer"))
+        .andExpect(model().attributeExists("customer"));
+    verifyNoInteractions(customerRepository);
+  }
 
-        mockMvc.perform(post("/customers/"+uuid+"/edit"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/customers/"+uuid))
-                .andExpect(model().attributeExists("customer"));
+  @Test
+  void processUpdationForm() throws Exception {
+    when(customerRepository.save(ArgumentMatchers.any()))
+        .thenReturn(Customer.builder().id(uuid).build());
 
-        verify(customerRepository).save(ArgumentMatchers.any());
-    }
+    mockMvc
+        .perform(post("/customers/" + uuid + "/edit"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(view().name("redirect:/customers/" + uuid))
+        .andExpect(model().attributeExists("customer"));
+
+    verify(customerRepository).save(ArgumentMatchers.any());
+  }
 }

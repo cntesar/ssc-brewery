@@ -16,12 +16,13 @@
  */
 package guru.sfg.brewery.domain;
 
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -40,6 +41,8 @@ public class Brewery extends BaseEntity {
         this.breweryName = breweryName;
     }
 
+    @Id
+    private UUID id;
     private String breweryName;
 
 }
