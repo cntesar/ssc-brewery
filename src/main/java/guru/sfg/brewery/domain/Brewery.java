@@ -16,33 +16,33 @@
  */
 package guru.sfg.brewery.domain;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import java.sql.Timestamp;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import jakarta.persistence.Entity;
-import java.sql.Timestamp;
-import java.util.UUID;
-
-/**
- * Created by jt on 2019-01-26.
- */
+/** Created by jt on 2019-01-26. */
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 public class Brewery extends BaseEntity {
 
-    @Builder
-    public Brewery(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String breweryName) {
-        super(id, version, createdDate, lastModifiedDate);
-        this.breweryName = breweryName;
-    }
+  @Builder
+  public Brewery(
+      UUID id,
+      Long version,
+      Timestamp createdDate,
+      Timestamp lastModifiedDate,
+      String breweryName) {
+    super(id, version, createdDate, lastModifiedDate);
+    this.breweryName = breweryName;
+  }
 
-    @Id
-    private UUID id;
-    private String breweryName;
-
+  @Id private UUID id;
+  private String breweryName;
 }

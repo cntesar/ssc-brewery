@@ -16,35 +16,36 @@
  */
 package guru.sfg.brewery.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import java.sql.Timestamp;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import java.sql.Timestamp;
-import java.util.UUID;
-
-/**
- * Created by jt on 2019-01-26.
- */
+/** Created by jt on 2019-01-26. */
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class BeerInventory extends BaseEntity{
+public class BeerInventory extends BaseEntity {
 
-    @Builder
-    public BeerInventory(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, Beer beer,
-                         Integer quantityOnHand) {
-        super(id, version, createdDate, lastModifiedDate);
-        this.beer = beer;
-        this.quantityOnHand = quantityOnHand;
-    }
+  @Builder
+  public BeerInventory(
+      UUID id,
+      Long version,
+      Timestamp createdDate,
+      Timestamp lastModifiedDate,
+      Beer beer,
+      Integer quantityOnHand) {
+    super(id, version, createdDate, lastModifiedDate);
+    this.beer = beer;
+    this.quantityOnHand = quantityOnHand;
+  }
 
-    @ManyToOne
-    private Beer beer;
+  @ManyToOne private Beer beer;
 
-    private Integer quantityOnHand = 0;
+  private Integer quantityOnHand = 0;
 }

@@ -70,6 +70,9 @@
         <webjars-jquery-ui.version>1.14.2</webjars-jquery-ui.version>
         <webjars-jquery.version>4.0.0</webjars-jquery.version>
         <wro4j.version>2.1.1</wro4j.version>
+        <fmt-maven-plugin.version>2.29</fmt-maven-plugin.version>
+        <mockito-core.version>5.20.0</mockito-core.version>
+        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
     </properties>
 
     <dependencies>
@@ -187,14 +190,14 @@
                     <dependency>
                         <groupId>org.mockito</groupId>
                         <artifactId>mockito-core</artifactId>
-                        <version>5.20.0</version>
+                        <version>${mockito-core.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.15.0</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <annotationProcessorPaths>
                         <path>
@@ -214,6 +217,19 @@
                         </compilerArg>
                     </compilerArgs>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify.fmt</groupId>
+                <artifactId>fmt-maven-plugin</artifactId>
+                <version>${fmt-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -18,37 +18,43 @@
 package guru.sfg.brewery.web.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class BeerDto extends BaseItem {
 
-    @Builder
-    public BeerDto(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate, String beerName,
-                   BeerStyleEnum beerStyle, String upc, Integer quantityOnHand, BigDecimal price) {
-        super(id, version, createdDate, lastModifiedDate);
-        this.beerName = beerName;
-        this.beerStyle = beerStyle;
-        this.upc = upc;
-        this.quantityOnHand = quantityOnHand;
-        this.price = price;
-    }
+  @Builder
+  public BeerDto(
+      UUID id,
+      Integer version,
+      OffsetDateTime createdDate,
+      OffsetDateTime lastModifiedDate,
+      String beerName,
+      BeerStyleEnum beerStyle,
+      String upc,
+      Integer quantityOnHand,
+      BigDecimal price) {
+    super(id, version, createdDate, lastModifiedDate);
+    this.beerName = beerName;
+    this.beerStyle = beerStyle;
+    this.upc = upc;
+    this.quantityOnHand = quantityOnHand;
+    this.price = price;
+  }
 
-    private String beerName;
-    private BeerStyleEnum beerStyle;
-    private String upc;
-    private Integer quantityOnHand;
+  private String beerName;
+  private BeerStyleEnum beerStyle;
+  private String upc;
+  private Integer quantityOnHand;
 
-    @JsonFormat(shape= JsonFormat.Shape.STRING)
-    private BigDecimal price;
-
+  @JsonFormat(shape = JsonFormat.Shape.STRING)
+  private BigDecimal price;
 }

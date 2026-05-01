@@ -17,6 +17,8 @@
 
 package guru.sfg.brewery.domain;
 
-public enum  OrderStatusEnum {
-    NEW, READY, PICKED_UP
+public enum OrderStatusEnum {
+  NEW,
+  READY,
+  PICKED_UP
 }

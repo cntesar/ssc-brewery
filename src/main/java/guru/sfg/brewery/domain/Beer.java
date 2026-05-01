@@ -17,13 +17,6 @@
 package guru.sfg.brewery.domain;
 
 import guru.sfg.brewery.web.model.BeerStyleEnum;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,44 +26,56 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
-/**
- * Created by jt on 2019-01-26.
- */
+/** Created by jt on 2019-01-26. */
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
 public class Beer extends BaseEntity {
 
-    @Builder
-    public Beer(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String beerName,
-                BeerStyleEnum beerStyle, String upc, Integer minOnHand,
-                Integer quantityToBrew, BigDecimal price, Set<BeerInventory> beerInventory) {
-        super(id, version, createdDate, lastModifiedDate);
-        this.beerName = beerName;
-        this.beerStyle = beerStyle;
-        this.upc = upc;
-        this.minOnHand = minOnHand;
-        this.quantityToBrew = quantityToBrew;
-        this.price = price;
-        this.beerInventory = beerInventory;
-    }
+  @Builder
+  public Beer(
+      UUID id,
+      Long version,
+      Timestamp createdDate,
+      Timestamp lastModifiedDate,
+      String beerName,
+      BeerStyleEnum beerStyle,
+      String upc,
+      Integer minOnHand,
+      Integer quantityToBrew,
+      BigDecimal price,
+      Set<BeerInventory> beerInventory) {
+    super(id, version, createdDate, lastModifiedDate);
+    this.beerName = beerName;
+    this.beerStyle = beerStyle;
+    this.upc = upc;
+    this.minOnHand = minOnHand;
+    this.quantityToBrew = quantityToBrew;
+    this.price = price;
+    this.beerInventory = beerInventory;
+  }
 
-    private String beerName;
-    private BeerStyleEnum beerStyle;
+  private String beerName;
+  private BeerStyleEnum beerStyle;
 
-    @Column(unique = true)
-    private String upc;
+  @Column(unique = true)
+  private String upc;
 
-    /**
-     * Min on hand qty - used to trigger brew
-     */
-    private Integer minOnHand;
-    private Integer quantityToBrew;
-    private BigDecimal price;
+  /** Min on hand qty - used to trigger brew */
+  private Integer minOnHand;
 
-    @OneToMany(mappedBy = "beer", cascade = CascadeType.ALL)
-    @Fetch(FetchMode.JOIN)
-    private Set<BeerInventory> beerInventory = new HashSet<>();
+  private Integer quantityToBrew;
+  private BigDecimal price;
+
+  @OneToMany(mappedBy = "beer", cascade = CascadeType.ALL)
+  @Fetch(FetchMode.JOIN)
+  private Set<BeerInventory> beerInventory = new HashSet<>();
 }

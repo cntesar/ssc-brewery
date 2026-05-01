@@ -18,19 +18,18 @@ package guru.sfg.brewery.services;
 
 import guru.sfg.brewery.domain.Brewery;
 import guru.sfg.brewery.repositories.BreweryRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
-public class BreweryServiceImpl implements BreweryService{
+public class BreweryServiceImpl implements BreweryService {
 
-    private final BreweryRepository breweryRepository;
+  private final BreweryRepository breweryRepository;
 
-    @Override
-    public List<Brewery> getAllBreweries() {
-        return breweryRepository.findAll();
-    }
+  @Override
+  public List<Brewery> getAllBreweries() {
+    return breweryRepository.findAll();
+  }
 }
