@@ -58,7 +58,7 @@ public class CustomerController {
       return "customers/findCustomers";
     } else if (customers.size() == 1) {
       // 1 customer found
-      customer = customers.get(0);
+      customer = customers.getFirst();
       return "redirect:/customers/" + customer.getId();
     } else {
       // multiple customers found
@@ -71,7 +71,9 @@ public class CustomerController {
   public ModelAndView showCustomer(@PathVariable UUID customerId) {
     ModelAndView mav = new ModelAndView("customers/customerDetails");
     // ToDO: Add Service
-    mav.addObject(customerRepository.findById(customerId).get());
+    if (customerRepository.findById(customerId).isPresent()) {
+      mav.addObject(customerRepository.findById(customerId).get());
+    }
     return mav;
   }
 
@@ -92,15 +94,16 @@ public class CustomerController {
 
   @GetMapping("/{customerId}/edit")
   public String initUpdateCustomerForm(@PathVariable UUID customerId, Model model) {
-    if (customerRepository.findById(customerId).isPresent())
+    if (customerRepository.findById(customerId).isPresent()) {
       model.addAttribute("customer", customerRepository.findById(customerId).get());
+    }
     return "customers/createOrUpdateCustomer";
   }
 
   @PostMapping("/{beerId}/edit")
   public String processUpdationForm(@Valid Customer customer, BindingResult result) {
     if (result.hasErrors()) {
-      return "beers/createOrUpdateCustomer";
+      return "customers/createOrUpdateCustomer";
     } else {
       // ToDO: Add Service
       Customer savedCustomer = customerRepository.save(customer);

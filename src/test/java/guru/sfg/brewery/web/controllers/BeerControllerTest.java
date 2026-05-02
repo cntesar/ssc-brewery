@@ -26,10 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import guru.sfg.brewery.domain.Beer;
 import guru.sfg.brewery.repositories.BeerRepository;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +39,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(MockitoExtension.class)
@@ -115,12 +113,13 @@ class BeerControllerTest {
 
   @Test
   void processCreationForm() throws Exception {
-    when(beerRepository.save(ArgumentMatchers.any())).thenReturn(Beer.builder().id(uuid).build());
-    mockMvc
-        .perform(post("/beers/new"))
-        .andExpect(status().is3xxRedirection())
-        .andExpect(view().name("redirect:/beers/" + uuid))
-        .andExpect(model().attributeExists("beer"));
+    mockBeer();
+
+    MvcResult res =
+        mockMvc.perform(post("/beers/new")).andExpect(status().is3xxRedirection()).andReturn();
+
+    performRedirect(res);
+
     verify(beerRepository).save(ArgumentMatchers.any());
   }
 
@@ -137,14 +136,29 @@ class BeerControllerTest {
 
   @Test
   void processUpdationForm() throws Exception {
-    when(beerRepository.save(ArgumentMatchers.any())).thenReturn(Beer.builder().id(uuid).build());
+    mockBeer();
 
-    mockMvc
-        .perform(post("/beers/" + uuid + "/edit"))
-        .andExpect(status().is3xxRedirection())
-        .andExpect(view().name("redirect:/beers/" + uuid))
-        .andExpect(model().attributeExists("beer"));
+    MvcResult res =
+        mockMvc
+            .perform(post("/beers/" + uuid + "/edit"))
+            .andExpect(status().is3xxRedirection())
+            .andReturn();
+
+    performRedirect(res);
 
     verify(beerRepository).save(ArgumentMatchers.any());
+  }
+
+  private void performRedirect(MvcResult res) throws Exception {
+    mockMvc
+        .perform(get(Objects.requireNonNull(res.getResponse().getRedirectedUrl())))
+        .andExpect(status().isOk())
+        .andExpect(model().attributeExists("beer"));
+  }
+
+  private void mockBeer() {
+    Beer beer = Beer.builder().id(uuid).build();
+    when(beerRepository.save(ArgumentMatchers.any())).thenReturn(beer);
+    when(beerRepository.findById(uuid)).thenReturn(Optional.of(beer));
   }
 }

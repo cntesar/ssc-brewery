@@ -25,8 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import guru.sfg.brewery.domain.Customer;
 import guru.sfg.brewery.repositories.CustomerRepository;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +38,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,9 +55,10 @@ class CustomerControllerTest {
 
   @BeforeEach
   void setUp() {
-    customerList = new ArrayList<Customer>();
-    customerList.add(Customer.builder().customerName("John Doe").build());
-    customerList.add(Customer.builder().customerName("John Doe").build());
+    customerList =
+        List.of(
+            Customer.builder().customerName("John Doe").build(),
+            Customer.builder().customerName("John Doe").build());
 
     final String id = "493410b3-dd0b-4b78-97bf-289f50f6e74f";
     uuid = UUID.fromString(id);
@@ -110,13 +112,13 @@ class CustomerControllerTest {
 
   @Test
   void processCreationForm() throws Exception {
-    when(customerRepository.save(ArgumentMatchers.any()))
-        .thenReturn(Customer.builder().id(uuid).build());
-    mockMvc
-        .perform(post("/customers/new"))
-        .andExpect(status().is3xxRedirection())
-        .andExpect(view().name("redirect:/customers/" + uuid))
-        .andExpect(model().attributeExists("customer"));
+    mockCustomer();
+
+    MvcResult res =
+        mockMvc.perform(post("/customers/new")).andExpect(status().is3xxRedirection()).andReturn();
+
+    performRedirect(res);
+
     verify(customerRepository).save(ArgumentMatchers.any());
   }
 
@@ -129,20 +131,34 @@ class CustomerControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("customers/createOrUpdateCustomer"))
         .andExpect(model().attributeExists("customer"));
-    verifyNoInteractions(customerRepository);
+    verifyNoMoreInteractions(customerRepository);
   }
 
   @Test
   void processUpdationForm() throws Exception {
-    when(customerRepository.save(ArgumentMatchers.any()))
-        .thenReturn(Customer.builder().id(uuid).build());
+    mockCustomer();
 
-    mockMvc
-        .perform(post("/customers/" + uuid + "/edit"))
-        .andExpect(status().is3xxRedirection())
-        .andExpect(view().name("redirect:/customers/" + uuid))
-        .andExpect(model().attributeExists("customer"));
+    MvcResult res =
+        mockMvc
+            .perform(post("/customers/" + uuid + "/edit"))
+            .andExpect(status().is3xxRedirection())
+            .andReturn();
+
+    performRedirect(res);
 
     verify(customerRepository).save(ArgumentMatchers.any());
+  }
+
+  private void mockCustomer() {
+    Customer saved = Customer.builder().id(uuid).build();
+    when(customerRepository.save(any())).thenReturn(saved);
+    when(customerRepository.findById(uuid)).thenReturn(Optional.of(saved));
+  }
+
+  private void performRedirect(MvcResult res) throws Exception {
+    mockMvc
+        .perform(get(Objects.requireNonNull(res.getResponse().getRedirectedUrl())))
+        .andExpect(status().isOk())
+        .andExpect(model().attributeExists("customer"));
   }
 }
