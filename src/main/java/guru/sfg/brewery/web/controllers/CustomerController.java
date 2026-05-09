@@ -26,10 +26,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @RequiredArgsConstructor
@@ -100,8 +97,16 @@ public class CustomerController {
     return "customers/createOrUpdateCustomer";
   }
 
-  @PostMapping("/{beerId}/edit")
-  public String processUpdationForm(@Valid Customer customer, BindingResult result) {
+  @ModelAttribute("customer")
+  public Customer customer(@PathVariable(name = "customerId", required = false) UUID customerId) {
+    return (customerId == null)
+        ? new Customer()
+        : customerRepository.findById(customerId).orElseThrow();
+  }
+
+  @PostMapping("/{customerId}/edit")
+  public String processUpdationForm(
+      @Valid @ModelAttribute("customer") Customer customer, BindingResult result) {
     if (result.hasErrors()) {
       return "customers/createOrUpdateCustomer";
     } else {
