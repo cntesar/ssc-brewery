@@ -5,23 +5,31 @@
 
 <h2>
     <th:block th:if="${customer['new']}">New Customer</th:block>
-    Update Customer
+    <th:block th:unless="${customer['new']}">Update Customer</th:block>
 </h2>
-<form th:object="${customer}" class="form-horizontal" id="add-customer-form" method="post">
-    <div class="form-group has-feedback">
 
-        <input
-                th:replace="~{fragments/inputField :: input ('Customer Name', 'customerName', 'text')}" />
+<form th:object="${customer}"
+      id="add-customer-form"
+      method="post">
 
+    <!-- ✅ form field wrapper -->
+    <div class="mb-3">
+
+        <!-- ✅ correct fragment usage -->
+        <th:block
+                th:replace="~{fragments/inputField :: input ('Customer Name', 'customerName', 'text')}"/>
     </div>
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button
-                    th:with="text=${customer['new']} ? 'Add Customer' : 'Update Customer'"
-                    class="btn btn-default" type="submit" th:text="${text}">Add
-                Customer</button>
-        </div>
-    </div>
+
+    <!-- ✅ submit button -->
+    <button
+            th:with="text=${customer['new']} ? 'Add Customer' : 'Update Customer'"
+            class="btn btn-primary"
+            type="submit"
+            th:text="${text}">
+        Add Customer
+    </button>
+
 </form>
+
 </body>
 </html>

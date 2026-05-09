@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'customers')}">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'customers')}">
 
 <body>
 
-<h2>Owners</h2>
+<h2>Customers</h2>
 
-<table id="vets" class="table table-striped">
-    <thead>
-    <tr>
-        <th style="width: 150px;">Customer Name</th>
-        <th style="width: 150px;">Registration Date</th>
+<div class="table-responsive">
+    <table id="customers" class="table table-striped table-hover">
 
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="customer : ${selections}">
-        <td>
-            <a th:href="@{/customers/__${customer.id}__}" th:text="${customer.customerName}"/></a>
-        </td>
-        <td th:text="${customer.createdDate}"/>
+        <thead>
+        <tr>
+            <th style="width: 150px;">Customer Name</th>
+            <th style="width: 150px;">Registration Date</th>
+        </tr>
+        </thead>
 
-    </tr>
-    </tbody>
-</table>
+        <tbody>
+        <tr th:each="customer : ${selections}">
+            <td>
+                <a th:href="@{/customers/__${customer.id}__}"
+                   th:text="${customer.customerName}">
+                </a>
+            </td>
+            <td th:text="${customer.createdDate}"></td>
+        </tr>
+        </tbody>
+
+    </table>
+</div>
 
 </body>
 </html>

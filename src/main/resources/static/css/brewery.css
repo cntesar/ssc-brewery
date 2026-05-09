@@ -75,7 +75,7 @@ strong {
 }
 
 .navbar a.navbar-brand {
-    background: url("../images/spring-logo-dataflow.png") -1px -1px no-repeat;
+    background: url("../images/cntesar-logo.png") -1px -1px no-repeat;
     margin: 12px 0 6px;
     width: 229px;
     height: 46px;
@@ -88,11 +88,8 @@ strong {
     display: block;
     width: 229px;
     height: 46px;
-    background: url("../images/spring-logo-dataflow.png") -1px -48px no-repeat;
+    background: url("../images/cntesar-logo.png") -1px -48px no-repeat;
     opacity: 0;
-    -moz-transition: opacity 0.12s ease-in-out;
-    -webkit-transition: opacity 0.12s ease-in-out;
-    -o-transition: opacity 0.12s ease-in-out;
 }
 
 .navbar a:hover.navbar-brand span {
@@ -107,10 +104,6 @@ strong {
     /* line-height: 14px; */
     padding: 28px 20px;
     transition: all 0.15s;
-    -webkit-transition: all 0.15s;
-    -moz-transition: all 0.15s;
-    -o-transition: all 0.15s;
-    -ms-transition: all 0.15s;
 }
 
 .navbar li > a {
@@ -154,7 +147,7 @@ strong {
         width: 148px;
         height: 50px;
         float: none;
-        background: url("../images/spring-logo-dataflow-mobile.png") 0 center no-repeat;
+        background: url("../images/cntesar-logo.png") 0 center no-repeat;
     }
 
     .homepage-billboard .homepage-subtitle {
@@ -198,10 +191,6 @@ strong {
 .btn-default {
     border-width: 2px;
     transition: border 0.15s;
-    -webkit-transition: border 0.15s;
-    -moz-transition: border 0.15s;
-    -o-transition: border 0.15s;
-    -ms-transition: border 0.15s;
 }
 
 .btn-default:hover,
@@ -209,8 +198,8 @@ strong {
 .btn-default:active,
 .btn-default.active,
 .open .dropdown-toggle.btn-default {
-    background-color: #34302D;
-    border-color: #34302D;
+    background-color: #f5c09d;
+    border-color: #f6c59e;
 }
 
 .container .text-muted {
