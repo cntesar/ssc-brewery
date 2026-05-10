@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "less": "^4.6.4",
+    "purgecss": "^8.0.0"
+  },
+  "scripts": {
+    "build:css": "lessc src/main/less/brewery.less src/main/resources/static/css/brewery.css"
+  }
+}
